@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION CalculateEquipmentDowntime
+    (firstDowntimeId NUMBER, secondDowntimeId NUMBER)
+RETURN TIMESTAMP AS OverlapTime TIMESTAMP;
+    DECLARE
+    firstDowntimeEnd TIMESTAMP;
+    secondDowntimeEnd TIMESTAMP;
+    firstDowmtimeStart TIMESTAMP;
+    secondDowmtimeStart TIMESTAMP;
+    BEGIN
+        SELECT "DownTimeEnd" INTO firstDowntimeEnd 
+        FROM "EquipmentDowntimes" 
+        WHERE "Id"=firstDowntimeId;
+        SELECT "DownTimeEnd" INTO secondDowntimeEnd 
+        FROM "EquipmentDowntimes" 
+        WHERE "Id"=secondDowntimeId;
+        SELECT "DowntimeStart" INTO firstDowmtimeStart
+        FROM "EquipmentDowntimes"
+        WHERE "Id"=firstDowntimeId;
+        SELECT "DowntimeStart" INTO secondDowmtimeStart
+        FROM "EquipmentDowntimes"
+        WHERE "Id"=secondDowntimeId;
+        IF (firstDowntimeEnd-secondDowntimeEnd>=0)
+            THEN OverlapTime:=EXTRACT(MINUTE FROM(firstDowntimeEnd-secondDowmtimeStart));
+            RETURN OverlapTime;
+        ElSE RETURN 0;
+        END IF;
+    END;

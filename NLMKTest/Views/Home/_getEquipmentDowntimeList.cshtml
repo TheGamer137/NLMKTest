@@ -1,0 +1,21 @@
+﻿@model IList<EquipmentDowntime>
+
+<thead>
+<tr class="text-center">
+    <th>Название оборудования</th>
+    <th>Начало простоя</th>
+    <th>Конец простоя</th>
+    <th>Действия</th>
+</tr>
+</thead>
+@foreach (EquipmentDowntime equipment in Model)
+{
+    <tr class="text-center">
+        <td>@equipment.EquipmentName</td>
+        <td>@equipment.DowntimeStart</td>
+        <td>@equipment.DownTimeEnd</td>
+        <td>
+            <a asp-action="DeleteEquipment" asp-controller="Home" asp-route-id="@equipment.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+        </td>
+    </tr>
+}
